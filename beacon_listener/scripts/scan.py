@@ -3,6 +3,7 @@ import rospy
 import time
 import copy
 
+
 class AdvertisingPacket:
     """Beacon entity"""
 
@@ -12,8 +13,6 @@ class AdvertisingPacket:
         self.raw = scan_entry.rawData
         self.rssi = scan_entry.rssi
         self.scan_data = copy.deepcopy(scan_entry.scanData)
-
-
 
 
 class BeaconScanDelegate(DefaultDelegate):
