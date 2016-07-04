@@ -26,6 +26,6 @@ class BeaconScanDelegate(DefaultDelegate):
         self.__container = container
 
     def handleDiscovery(self, scanEntry, isNewDev, isNewData):
-        rospy.loginfo("Discovery of device %s, RSSI: %s", scanEntry.addr, scanEntry.rssi)
+        # rospy.loginfo("Discovery of device %s, RSSI: %s", scanEntry.addr, scanEntry.rssi)
         packet = AdvertisingPacket(scanEntry)
         self.__container.insert(packet.addr, packet)

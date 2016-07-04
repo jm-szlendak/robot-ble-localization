@@ -16,7 +16,7 @@ class BeaconContainer:
                 yield v
 
     def clean(self):
-        """Cleans up container, deleting items older than max_age attibute"""
+        """Cleans up container, deleting items older than max_age attribute"""
         with self.__lock:
             self.__beacons = {addr: dev for addr, dev in self.__beacons.items() if
                               time.time() - dev.updated_at < self.__max_age}
@@ -32,8 +32,6 @@ class BeaconContainer:
             return self.__beacons[addr]
         else:
             return None
-
-
 
     def dump(self):
         """Dumps device list"""
