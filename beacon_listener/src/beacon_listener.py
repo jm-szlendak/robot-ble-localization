@@ -6,8 +6,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from scripts.scan import BeaconScanDelegate
 from scripts.beacon_container import BeaconContainer
 from scripts.scan_worker import ScanWorker
-from scripts.beacon_publisher import *
-# from beacon_msgs.msg import Advertising
+from scripts.beacon_publisher import BeaconPublishingWrapper
+from scripts.beacon_localization import BeaconLocalizationFilter
+from beacon_msgs.msg import LocationTag
 from bluepy.btle import Scanner
 import rospy
 
@@ -34,12 +35,13 @@ if __name__ == "__main__":
     rospy.loginfo("Scanning...")
 
     r = rospy.Rate(1 / publish_rate)
-    adv_filter = BeaconLocalizationFilter(group_id, manufacturer_id)
-    publisher = BeaconPublishingWrapper(adv_filter=adv_filter, container=beacon_container)
-    # pub = rospy.Publisher('beacons', Advertising(), queue_size=100)
+    adv_filter = BeaconLocalizationFilter(group_id, beacon_max_age)
+    ros_pub = rospy.Publisher('beacons', LocationTag, queue_size=100)
+    publisher = BeaconPublishingWrapper(adv_filter=adv_filter, container=beacon_container, pub=ros_pub)
+
     while not rospy.is_shutdown():
         beacon_container.clean()
-        beacon_container.dump()
         publisher.publish()
         r.sleep()
 
+    scan_worker.stop()

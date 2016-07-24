@@ -1,5 +1,4 @@
 from bluepy.btle import DefaultDelegate
-import rospy
 import time
 import copy
 

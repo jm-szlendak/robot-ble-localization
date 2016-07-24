@@ -46,6 +46,8 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    Advertising.msg
+   AdvertisingBunch.msg
+   LocationTag.msg
  )
 
 ## Generate services in the 'srv' folder
