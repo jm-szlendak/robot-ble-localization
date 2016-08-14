@@ -27,6 +27,7 @@ class TestBeaconContainer(TestCase):
         container = BeaconContainer()
         container.insert(packet.addr, packet)
         container.insert(packet2.addr, packet2)
-        for a, b in container:
-            self.assertIsNotNone(a)
-            self.assertIsNotNone(b)
+        # print container
+        for item in container:
+            self.assertIsNotNone(item)
+            # self.assertIsNotNone(b)

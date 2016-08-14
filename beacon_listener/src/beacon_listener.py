@@ -8,6 +8,7 @@ from scripts.beacon_container import BeaconContainer
 from scripts.scan_worker import ScanWorker
 from scripts.beacon_publisher import BeaconPublishingWrapper
 from scripts.beacon_localization import BeaconLocalizationFilter
+from scripts.services import *
 from beacon_msgs.msg import LocationTag
 from bluepy.btle import Scanner
 import rospy
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     rospy.init_node("beacon_listener")
     rospy.loginfo("Starting Beacon Listener")
     rospy.on_shutdown(shutdown_hook)
+
     # create scanner
     beacon_container = BeaconContainer(beacon_max_age)
     scan_delegate = BeaconScanDelegate(container=beacon_container)
@@ -40,11 +42,17 @@ if __name__ == "__main__":
     scan_worker.start()
     rospy.loginfo("Scanning...")
 
-    r = rospy.Rate(1 / publish_rate)
+    # init filtering
     adv_filter = BeaconLocalizationFilter(group_id, beacon_max_age)
     ros_pub = rospy.Publisher('/beacon_localization/location_tag', LocationTag, queue_size=100)
     publisher = BeaconPublishingWrapper(adv_filter=adv_filter, container=beacon_container, pub=ros_pub)
 
+    # init services
+    available_devs_svc_wrapper = AvaliableDevicesServiceWrapper(beacon_container)
+    available_devs_svc = rospy.Service('get_available_devices', GetAvailableDevices, available_devs_svc_wrapper.handler)
+    rospy.loginfo("'/get_available_devices' service started")
+
+    r = rospy.Rate(1 / publish_rate)
     while not rospy.is_shutdown():
         beacon_container.clean()
         publisher.publish()
