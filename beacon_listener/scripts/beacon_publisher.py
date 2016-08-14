@@ -9,6 +9,7 @@ class BeaconPublishingWrapper:
 
     def publish(self):
         publish_list = self.__filter.do_filter(self.__container)
+        # print  len(publish_list)
         for item in publish_list:
             self.__publisher.publish(item)
 

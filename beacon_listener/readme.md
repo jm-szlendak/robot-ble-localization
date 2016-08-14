@@ -2,6 +2,15 @@
 
 ROS node designed to listen to beacons advertising.
 
+##Usage:
+```
+$ rosrun beacon_listener beacon_listener.py
+```
+
+### Topics
+
+`/beacon_localization/location_tag` - message type: beacon_msgs/LocationTag
+
 ##Advertising packet structure
 |1  |2|3|4  |5|6|7|8|9|10|11|12|13|14|15|16|17|18|19 |20|21|22|23|24|25|26|27|28|29|30|31|
 |:-:|-|-|:-:|-|-|-|-|-|- |- |- |- |- |- |- |- |- |:-:|- |- |- |- |- |- |- |- |- |- |- |- |

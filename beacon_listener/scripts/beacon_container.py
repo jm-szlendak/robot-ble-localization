@@ -15,6 +15,10 @@ class BeaconContainer:
             for k, v in self.__beacons.items():
                 yield v
 
+    def __len__(self):
+        with self.__lock:
+            return len(self.__beacons)
+
     def clean(self):
         """Cleans up container, deleting items older than max_age attribute"""
         with self.__lock:

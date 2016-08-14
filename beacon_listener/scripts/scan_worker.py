@@ -8,16 +8,24 @@ class ScanWorker:
         self.__scanner = scanner
         self.__scan_time = scan_time
         self.__thread = Thread(target=self.run)
+        self.__thread.setDaemon(True)
         self.__stopped = False
 
     def run(self):
         while not self.__stopped:
-            self.__scanner.start()
-            self.__scanner.process(self.__scan_time)
+
+            try:
+                self.__scanner.scan(self.__scan_time)
+            except Exception as e:
+                pass
 
     def start(self):
         self.__stopped = False
         self.__thread.start()
 
     def stop(self):
+
         self.__stopped = True
+        self.__thread.join()
+
+        # print 'stopped: ' + self.__thread.name

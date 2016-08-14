@@ -17,12 +17,12 @@ class BeaconLocalizationFilter:
             try:
                 i = BeaconLocalizationAdvPacket(x)
                 if i.gid != self.__accepted_group_id:
-                    pass
-                if i.timestamp - time.time() < self.__accepted_age:
-                    pass
+                    continue
+                if time.time() - i.timestamp > self.__accepted_age:
+                    continue
                 filtered.append(i.to_msg())
             except PacketException:
-                pass
+                continue
         return filtered
 
 
@@ -32,8 +32,10 @@ class BeaconLocalizationAdvPacket:
 
     def __init__(self, advertising_packet):
         if len(advertising_packet.scan_data[255]) != 14:
+            # print 'pass in size'
             raise PacketException("Invalid size")
         if struct.unpack('H', advertising_packet.scan_data[255][0:2])[0] != 0xFFFF:
+            # print 'pass in code'
             raise PacketException("Invalid manufacturer code")
         self.gid = struct.unpack('I', advertising_packet.scan_data[255][2:6])[0]
         self.bid = struct.unpack('Q', advertising_packet.scan_data[255][6:14])[0]

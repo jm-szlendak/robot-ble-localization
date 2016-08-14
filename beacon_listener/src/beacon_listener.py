@@ -19,11 +19,17 @@ publish_rate = 1
 group_id = 0x3412
 manufacturer_id = 0xffff
 
+
+def shutdown_hook():
+    rospy.loginfo("Shutting down...")
+    scan_worker.stop()
+
+
 if __name__ == "__main__":
     # init ros
     rospy.init_node("beacon_listener")
     rospy.loginfo("Starting Beacon Listener")
-
+    rospy.on_shutdown(shutdown_hook)
     # create scanner
     beacon_container = BeaconContainer(beacon_max_age)
     scan_delegate = BeaconScanDelegate(container=beacon_container)
@@ -36,12 +42,10 @@ if __name__ == "__main__":
 
     r = rospy.Rate(1 / publish_rate)
     adv_filter = BeaconLocalizationFilter(group_id, beacon_max_age)
-    ros_pub = rospy.Publisher('beacons', LocationTag, queue_size=100)
+    ros_pub = rospy.Publisher('/beacon_localization/location_tag', LocationTag, queue_size=100)
     publisher = BeaconPublishingWrapper(adv_filter=adv_filter, container=beacon_container, pub=ros_pub)
 
     while not rospy.is_shutdown():
         beacon_container.clean()
         publisher.publish()
         r.sleep()
-
-    scan_worker.stop()
