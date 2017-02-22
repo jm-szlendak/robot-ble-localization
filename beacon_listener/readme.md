@@ -2,6 +2,21 @@
 
 ROS node designed to listen to beacons advertising.
 
+##Installation
+
+First, install bluepy (hope it will be automated in future releases):
+```
+    $ sudo apt-get install python-pip libglib2.0-dev
+    $ sudo pip install bluepy
+```
+
+If you want to run this package without root permissions (probably you do):
+```
+$ sudo apt-get install libcap2-bin
+$ sudo setcap 'cap_net_raw,cap_net_admin+eip' /usr/local/lib/python2.7/dist-packages/bluepy/bluepy-helper
+```
+
+
 ##Usage:
 ```
 $ rosrun beacon_listener beacon_listener.py
