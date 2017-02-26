@@ -49,8 +49,8 @@ if __name__ == "__main__":
 
     # init services
     available_devs_svc_wrapper = AvaliableDevicesServiceWrapper(beacon_container)
-    available_devs_svc = rospy.Service('get_available_devices', GetAvailableDevices, available_devs_svc_wrapper.handler)
-    rospy.loginfo("'/get_available_devices' service started")
+    available_devs_svc = rospy.Service('/beacon_localization/get_available_devices', GetAvailableDevices, available_devs_svc_wrapper.handler)
+    rospy.loginfo("'/beacon_localization/get_available_devices' service started")
 
     r = rospy.Rate(1 / publish_rate)
     while not rospy.is_shutdown():
