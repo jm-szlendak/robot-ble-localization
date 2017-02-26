@@ -18,7 +18,8 @@ class ScanWorker:
             try:
                 self.__scanner.scan(self.__scan_time)
             except BTLEException as e:
-                rospy.logerr('BTLEException: ' + str(e) + ' \nThis may be problem with lack of root privileges. See package readme.')
+                rospy.logerr('BTLEException: ' + str(e) + '\nCheck your Bluetooth device. If it is turned on, this may be problem with lack of root privileges. See '
+                                                          'package readme.')
                 self.__stopped = True
             except Exception as e:
                 pass

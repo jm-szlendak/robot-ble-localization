@@ -21,7 +21,7 @@ class BeaconScanDelegate(DefaultDelegate):
         DefaultDelegate.__init__(self)
         self.__container = container
 
-    def setContainer(self, container):
+    def set_container(self, container):
         self.__container = container
 
     def handleDiscovery(self, scanEntry, isNewDev, isNewData):

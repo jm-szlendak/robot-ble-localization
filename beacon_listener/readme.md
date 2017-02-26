@@ -27,19 +27,32 @@ $ rosrun beacon_listener beacon_listener.py
 `/beacon_localization/location_tag` - message type: beacon_msgs/LocationTag
 
 ##Advertising packet structure
-|1  |2|3|4  |5|6|7|8|9|10|11|12|13|14|15|16|17|18|19 |20|21|22|23|24|25|26|27|28|29|30|31|
-|:-:|-|-|:-:|-|-|-|-|-|- |- |- |- |- |- |- |- |- |:-:|- |- |- |- |- |- |- |- |- |- |- |- |
-|flags|||name|||||||||||||||                  manufacturer-specific |||||||||||||
-| |||RRG WUT #xx|||||||||||||||                  0xFFFF|Group ID||||Beacon ID||||||||||||
+In square brackets field sizes are given. They are equal 1 (length byte) +  X (actual payload size) 
+```
+| flags [1+2] | name [1+12] | payload [1+14] |
 
+```
 
+Payload:
+
+```
+| 0xFFFF [2b] | group id [4b] | beacon id [8b] |
+```
+
+`0xFFFF` is always constant, it is Bluetooth beacon manufacturer code. 
+
+Group ID is for identifying beacon sets.
+
+Beacon ID is for identifying individual beacons. It is equal to beacon MAC address.
+ 
 ##Advertising filtering rules
 We name beacons "RRG WUT #nn", but it's only for operator's convinience.
 To filter out unwanted packets application checks 'manufacturer-specific field' with following rules:
 
  * Manufacturer ID is expected to be 0xFFFF
- * 2 first bytes of payload is 'beacon-set-ID'. This programmable parameter is used to differ sets of beacons
- * Rest of bytes are beacon-individual ID
+ * Group ID match. Filter with pass only beacons from given group.
+ 
+ Beacon ID is not checked in filter, although a filter which filters out specific beacons can be implemented. 
  
 ##Troubleshooting
 1. How to scan without root permissions

@@ -2,7 +2,7 @@
 uint32 gid
 
 # Beacon ID
-uint64 bid
+string bid
 
 # RSSI
 int16 rssi

@@ -1,5 +1,5 @@
 
-class BeaconPublishingWrapper:
+class PublishingWrapper:
     """Responsible for filtering beacons and publishing they state"""
 
     def __init__(self, pub=None, container=None, adv_filter=None):

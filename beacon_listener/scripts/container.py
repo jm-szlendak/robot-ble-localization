@@ -2,7 +2,7 @@ from threading import Lock
 import time
 
 
-class BeaconContainer:
+class Container:
     """Container class for storing active devices. Inactive devices may be cleaned up"""
 
     def __init__(self, max_age=10):
