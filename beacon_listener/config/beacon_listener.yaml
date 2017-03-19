@@ -1,0 +1,5 @@
+beacon_listener:
+    scan_time: 1
+    max_beacon_age: 1
+    publish_rate: 5
+    group_id: 0xAAAA

@@ -1,0 +1,10 @@
+<launch>
+
+  <rosparam file="$(find beacon_listener)/config/beacon_listener.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="beacon_listener" pkg="beacon_listener" type="beacon_listener.py" respawn="false"
+    output="screen" />
+
+
+</launch>
