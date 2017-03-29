@@ -29,14 +29,14 @@ $ rosrun beacon_listener beacon_listener.py
 ##Advertising packet structure
 In square brackets field sizes are given. They are equal 1 (length byte) +  X (actual payload size) 
 ```
-| flags [1+2] | name [1+12] | payload [1+14] |
+| flags [1+2 B] | name [1+12 B] | payload [1+14 B] |
 
 ```
 
 Payload:
 
 ```
-| 0xFFFF [2b] | group id [4b] | beacon id [8b] |
+| 0xFFFF [2B] | group id [4B] | beacon id [6B] | padding [1B]
 ```
 
 `0xFFFF` is always constant, it is Bluetooth beacon manufacturer code. 
