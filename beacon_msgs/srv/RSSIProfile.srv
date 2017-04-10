@@ -1,0 +1,6 @@
+float64 distance
+---
+float64 avg_rssi
+float64 std_dev
+float64[] measurements
+uint8 count
