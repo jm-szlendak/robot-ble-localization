@@ -11,7 +11,7 @@ class BeaconDataCollector:
     def wait_for_measurements(self, measurements_count):
         self.__is_collecting = True
 
-        while len(self.__buffer) <= measurements_count:
+        while len(self.__buffer) < measurements_count:
             sleep(0.1)
 
         self.__is_collecting = False

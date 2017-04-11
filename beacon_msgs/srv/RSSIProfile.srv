@@ -1,6 +1,7 @@
 float64 distance
+uint8 count
 ---
 float64 avg_rssi
 float64 std_dev
 float64[] measurements
-uint8 count
+
