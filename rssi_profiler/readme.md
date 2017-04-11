@@ -37,5 +37,7 @@ Column represents consecutive measurements.
 ```
 
 1st column - distance
+
 2nd column - average RSSI
+
 3rd column - standard deviation
