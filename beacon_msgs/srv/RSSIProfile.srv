@@ -1,5 +1,5 @@
 float64 distance
-uint8 count
+uint16 count
 ---
 float64 avg_rssi
 float64 std_dev
