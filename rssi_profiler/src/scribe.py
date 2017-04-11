@@ -44,15 +44,15 @@ def main():
 
     args = rospy.myargv(argv=sys.argv)
 
-    distance = float(args[1])
-    count = int(args[2])
-    outfile_name = args[3]
-    mode = args[4]
-
     if len(args) != 5:
         print "Usage:"
         print "python scribe.py [distance] [measurements count] [output filename] [single | multi]"
         exit(1)
+
+    distance = float(args[1])
+    count = int(args[2])
+    outfile_name = args[3]
+    mode = args[4]
 
     rospy.loginfo("Starting RSSI Scribe")
 
@@ -65,8 +65,8 @@ def main():
         single_measure(distance, count, outfile_name, rssi_profile)
     elif mode=='multi':
         multi_measure(distance, count, outfile_name, rssi_profile)
-    else
-        throw Exception('Invalid mode: use "single" for column-oriented file or "multi" for many measurements (append mode)')
+    else:
+        raise Exception('Invalid mode: use "single" for column-oriented file or "multi" for many measurements (append mode)')
 
 if __name__ == "__main__":
     main()
