@@ -7,10 +7,11 @@ class BeaconDataCollector:
         self.__lock = Lock()
         self.__buffer = []
         self.__is_collecting = False
+        self.__accepted_bid = None
 
-    def wait_for_measurements(self, measurements_count):
+    def wait_for_measurements(self, measurements_count, bid):
         self.__is_collecting = True
-
+        self.__accepted_bid = bid
         while len(self.__buffer) < measurements_count:
             sleep(0.1)
 
@@ -21,6 +22,9 @@ class BeaconDataCollector:
 
     def add_measurement(self, measurement):
         if not self.__is_collecting:
+            return
+
+        if measurement.bid != self.__accepted_bid:
             return
 
         with self.__lock:

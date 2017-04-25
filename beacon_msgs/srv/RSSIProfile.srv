@@ -1,5 +1,6 @@
 float64 distance
 uint16 count
+string bid
 ---
 float64 avg_rssi
 float64 std_dev

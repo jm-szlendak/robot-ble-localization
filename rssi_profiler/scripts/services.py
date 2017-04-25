@@ -11,7 +11,7 @@ class RSSIProfileServiceWrapper:
     def handler(self, request):
         rospy.loginfo("Service rssi_profile called")
         # response = RSSIProfileResponse()
-        measurements = self.__collector.wait_for_measurements(request.count)
+        measurements = self.__collector.wait_for_measurements(request.count, request.bid)
         data = np.array([measurement.rssi for measurement in measurements])
         avg = np.average(data)
         std_dev = np.std(data)

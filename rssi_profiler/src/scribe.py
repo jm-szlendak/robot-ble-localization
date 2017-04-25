@@ -7,12 +7,12 @@ from beacon_msgs.srv import RSSIProfile
 import rospy
 
 
-def multi_measure(distance, count, output_filename, service):
+def multi_measure(distance, count, bid, output_filename, service):
     try:
         with open(output_filename, 'a') as outfile:
 
             rospy.loginfo('Calling service for %s measurements' % count)
-            measure = service.call(distance, count)
+            measure = service.call(distance, count, bid)
             line = str(distance)
             line += '\t'
             line += str(measure.avg_rssi)
@@ -25,12 +25,12 @@ def multi_measure(distance, count, output_filename, service):
         exit(1)
 
 
-def single_measure(distance, count, output_filename, service):
+def single_measure(distance, count, bid, output_filename, service):
     try:
         with open(output_filename, 'w') as outfile:
             outfile.truncate()
             rospy.loginfo('Calling service for %s measurements' % count)
-            measure = service.call(distance, count)
+            measure = service.call(distance, count, bid)
             outfile.writelines([str(item) + '\n' for item in measure.measurements])
             # outfile.write(line)
     except IOError:
@@ -44,15 +44,16 @@ def main():
 
     args = rospy.myargv(argv=sys.argv)
 
-    if len(args) != 5:
+    if len(args) != 6:
         print "Usage:"
-        print "python scribe.py [distance] [measurements count] [output filename] [single | multi]"
+        print "python scribe.py [distance] [measurements count] [beacon id] [output filename] [single | multi]"
         exit(1)
 
     distance = float(args[1])
     count = int(args[2])
-    outfile_name = args[3]
-    mode = args[4]
+    bid = args[3]
+    outfile_name = args[4]
+    mode = args[5]
 
     rospy.loginfo("Starting RSSI Scribe")
 
@@ -62,9 +63,9 @@ def main():
     rospy.loginfo('Service rssi_profile ready')
 
     if mode=='single':
-        single_measure(distance, count, outfile_name, rssi_profile)
+        single_measure(distance, count, bid, outfile_name, rssi_profile)
     elif mode=='multi':
-        multi_measure(distance, count, outfile_name, rssi_profile)
+        multi_measure(distance, count, bid, outfile_name, rssi_profile)
     else:
         raise Exception('Invalid mode: use "single" for column-oriented file or "multi" for many measurements (append mode)')
 
