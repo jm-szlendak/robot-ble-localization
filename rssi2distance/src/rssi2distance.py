@@ -7,12 +7,16 @@ from beacon_msgs.msg import LocationTag
 from scripts.filters import OnlyRecentValueFilter, MovingAverageFilter
 from scripts.services import GetDistancesServiceWrapper
 from beacon_msgs.srv import GetBeaconDistances
+from scripts.rssi2distance_model import ExponentialModel
 
 import rospy
 
 
 recent_val_filter = OnlyRecentValueFilter()
 moving_avg_filter = MovingAverageFilter()
+model = ExponentialModel(35.18, 0.9329, -67.05)
+
+
 
 def callback(data):
     recent_val_filter.put(data.bid, data)
@@ -25,8 +29,8 @@ if __name__ == "__main__":
 
     rospy.Subscriber('beacon_localization/location_tag', LocationTag, callback)
 
-    recent_val_srv_wrapper = GetDistancesServiceWrapper(recent_val_filter)
-    moving_avg_srv_wrapper = GetDistancesServiceWrapper(moving_avg_filter)
+    recent_val_srv_wrapper = GetDistancesServiceWrapper(recent_val_filter, model)
+    moving_avg_srv_wrapper = GetDistancesServiceWrapper(moving_avg_filter, model)
     recent_val_srv = rospy.Service('/beacon_localization/distances/recent', GetBeaconDistances,
                                    recent_val_srv_wrapper.handler)
     moving_avg_srv = rospy.Service('/beacon_localization/distances/moving_average', GetBeaconDistances,
