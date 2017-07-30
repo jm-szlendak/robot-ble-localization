@@ -4,16 +4,19 @@ import os.path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from beacon_msgs.msg import LocationTag
-from scripts.beacon_buffer import BeaconBuffer
+from scripts.filters import OnlyRecentValueFilter, MovingAverageFilter
+from scripts.services import GetDistancesServiceWrapper
+from beacon_msgs.srv import GetBeaconDistances
 
 import rospy
 
-MAX_BUFFERED_BEACON_AGE = 5
-buffer = BeaconBuffer(MAX_BUFFERED_BEACON_AGE)
+
+recent_val_filter = OnlyRecentValueFilter()
+moving_avg_filter = MovingAverageFilter()
 
 def callback(data):
-    buffer.put(data)
-
+    recent_val_filter.put(data.bid, data)
+    moving_avg_filter.put(data.bid, data)
 
 if __name__ == "__main__":
     # init ros
@@ -22,5 +25,11 @@ if __name__ == "__main__":
 
     rospy.Subscriber('beacon_localization/location_tag', LocationTag, callback)
 
+    recent_val_srv_wrapper = GetDistancesServiceWrapper(recent_val_filter)
+    moving_avg_srv_wrapper = GetDistancesServiceWrapper(moving_avg_filter)
+    recent_val_srv = rospy.Service('/beacon_localization/distances/recent', GetBeaconDistances,
+                                   recent_val_srv_wrapper.handler)
+    moving_avg_srv = rospy.Service('/beacon_localization/distances/moving_average', GetBeaconDistances,
+                                   moving_avg_srv_wrapper.handler)
     rospy.spin()
 

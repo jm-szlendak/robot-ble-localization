@@ -43,6 +43,7 @@ if __name__ == "__main__":
 
     # init filtering
     adv_filter = BeaconLocalizationFilter(GROUP_ID, MAX_BEACON_AGE)
+    # ros_pub_int = rospy.Publisher('/beacon_localization/location_tag/interpolated', LocationTag, queue_size=100)
     ros_pub = rospy.Publisher('/beacon_localization/location_tag', LocationTag, queue_size=100)
     publisher = PublishingWrapper(adv_filter=adv_filter, container=beacon_container, pub=ros_pub)
 

@@ -48,6 +48,7 @@ find_package(catkin REQUIRED COMPONENTS
    Advertising.msg
    AdvertisingBunch.msg
    LocationTag.msg
+   BeaconPositionAndDistance.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -56,6 +57,7 @@ add_service_files(
   GetAvailableBeacons.srv
   GetAvailableLocationTags.srv
   RSSIProfile.srv
+  GetBeaconDistances.srv
  )
 
 ## Generate added messages and services with any dependencies listed here
