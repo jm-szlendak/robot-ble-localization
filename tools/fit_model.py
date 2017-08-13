@@ -5,11 +5,11 @@ from scipy.optimize import curve_fit
 
 
 def funcL(x, a, b, c):
-    return -a * np.log(b * x) + c
+    return a * np.log(-b * x) + c
 
 
 def funcE(x, a, b, c):
-    return a * np.exp(-b * x) + c
+    return a * np.exp( x) + c
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -23,14 +23,13 @@ if __name__ == '__main__':
         exit(1)
 
     data = np.loadtxt(args.input).T
-    x = data[0]
-    y = data[1]
-    yerr = data[2]
-    xlogfit, _ = curve_fit(funcL, x, y, sigma=yerr)
-    xexpfit, _ = curve_fit(funcE, x, y, sigma=yerr)
+    y = data[0]
+    x = -1*data[1]
 
-    xinvexpfit, _ = curve_fit(funcE, y, x)
-    print 'Log fitting results: [a,b,c]: ', xlogfit
+    # xlogfit, _ = curve_fit(funcL, x, y)
+    xexpfit, _ = curve_fit(funcE, x, y)
+
+    # print 'Log fitting results: [a,b,c]: ', xlogfit
     print 'Exp fitting results: [a,b,c]: ', xexpfit
 
     if args.log:
@@ -38,18 +37,15 @@ if __name__ == '__main__':
     else:
         plt.subplot(111)
 
-    plt.errorbar(x, y, yerr, fmt='x')
+    plt.scatter(x, y)
 
-    if args.f == 'exp':
-        plt.plot(x, funcE(x, *xexpfit))
-    if args.f == 'log':
-        plt.plot(x, funcL(x, *xlogfit))
-    if args.f == 'both':
-        plt.plot(x, funcL(x, *xlogfit))
-        plt.plot(x, funcE(x, *xexpfit))
+
+    # plt.plot(x, funcL(x, *xlogfit))
+    plt.plot(x, funcE(x, *xexpfit))
+        # plt.plot(x, funcL(x, *xlogfit))
     plt.axis([0, x[-1] + 0.1 * x[-1], 1.2 * np.amin(y), 5])
-    plt.xlabel('Odleglosc [m]')
-    plt.ylabel('RSSI [dBm]')
+    plt.ylabel('Odleglosc [m]')
+    plt.xlabel('RSSI [dBm]')
     plt.grid()
     plt.show()
     # print data.T
