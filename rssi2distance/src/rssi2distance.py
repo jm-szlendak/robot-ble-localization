@@ -14,7 +14,7 @@ import rospy
 
 recent_val_filter = OnlyRecentValueFilter()
 moving_avg_filter = MovingAverageFilter()
-model = ExponentialModel(8.53239738e-33,   1.00000000e+00,   3.06811272e+00)
+model = ExponentialModel(8.53239738e-33,   1.00000000e+00,   3.06811272e+00) #dummy model, each beacon should have its own model!
 
 beacon_map = BeaconMap()
 
