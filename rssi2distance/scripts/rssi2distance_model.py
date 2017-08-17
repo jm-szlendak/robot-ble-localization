@@ -1,15 +1,16 @@
 import math
 import numpy as np
 
-class ExponentialModel(object):
+
+class Power10Model(object):
 
     def __init__(self, *args):
         self.A = args[0]
         self.B = args[1]
-        self.C = args[2]
+
+        print self.A, self.B
 
     def apply(self, x):
         """Applies model to given rssi, returning distance"""
-        value = self.A * np.exp(-self.B * x) + self.C
-        print x, value
+        value = 10 ** ((-x - self.A)/self.B)  # self.A * np.exp(-self.B * x) + self.C
         return value

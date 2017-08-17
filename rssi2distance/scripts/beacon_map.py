@@ -3,8 +3,8 @@ class BeaconMap(object):
         self.beacons = dict()
         pass
 
-    def add_beacon(self, bid, x_pos, y_pos, model):
-        self.beacons[bid] = Beacon(bid, x_pos, y_pos, model)
+    def add_beacon(self, bid, x_pos, y_pos, z_pos, model):
+        self.beacons[bid] = Beacon(bid, x_pos, y_pos, z_pos, model)
 
         return self
 
@@ -17,8 +17,9 @@ class BeaconMap(object):
 
 class Beacon(object):
 
-    def __init__(self, bid, x, y, model):
+    def __init__(self, bid, x, y, z, model):
         self.bid = bid
         self.x = x
         self.y = y
+        self.z = z
         self.model = model

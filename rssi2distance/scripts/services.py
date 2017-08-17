@@ -3,7 +3,7 @@ from binascii import hexlify
 import time
 from beacon_msgs.srv import GetBeaconDistancesResponse
 from beacon_msgs.msg import BeaconPositionAndDistance
-
+from geometry_msgs.msg import Pose, Point
 
 class GetDistancesServiceWrapper:
     """This service returns list of recent beacon distances"""
@@ -19,8 +19,12 @@ class GetDistancesServiceWrapper:
                 bid=k,
                 updated_at=rospy.Time.from_sec(time.time()),
                 distance=self.__beacon_map.get(k).model.apply(v.rssi),
-                x=self.__beacon_map.get(k).x,
-                y=self.__beacon_map.get(k).y,
+                rssi=v.rssi,
+                pose=Pose(position=Point(
+                    x=self.__beacon_map.get(k).x,
+                    y=self.__beacon_map.get(k).y,
+                    z=self.__beacon_map.get(k).z
+                ))
             ) for k, v in self.__filter.get_all_values().items()
         ]
 

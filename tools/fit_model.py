@@ -5,7 +5,10 @@ from scipy.optimize import curve_fit
 
 
 def funcL(x, a, b, c):
-    return a * np.log(-b * x) + c
+    return -a * 10 * np.log10(-x)
+
+def funcP(x, a, b, c):
+    return 10 ** ((x - a)/b)
 
 
 def funcE(x, a, b, c):
@@ -24,13 +27,15 @@ if __name__ == '__main__':
 
     data = np.loadtxt(args.input).T
     y = data[0]
-    x = -1*data[1]
+    x = -data[1]
 
     # xlogfit, _ = curve_fit(funcL, x, y)
-    xexpfit, _ = curve_fit(funcE, x, y)
+    # xexpfit, _ = curve_fit(funcL, x, y)
+    xpowfit, _ = curve_fit(funcP, x, y)
 
+    print 'Pow fitting results: [a,b,c]: ', xpowfit
     # print 'Log fitting results: [a,b,c]: ', xlogfit
-    print 'Exp fitting results: [a,b,c]: ', xexpfit
+    # print 'Exp fitting results: [a,b,c]: ', xexpfit
 
     if args.log:
         plt.subplot(111, xscale="log")
@@ -38,10 +43,10 @@ if __name__ == '__main__':
         plt.subplot(111)
 
     plt.scatter(x, y)
-
-
+    # print funcL(np.linspace(0,100,100), *xlogfit)
     # plt.plot(x, funcL(x, *xlogfit))
-    plt.plot(x, funcE(x, *xexpfit))
+    plt.plot(np.linspace(0,100,100), funcP(np.linspace(0,100,100), *xpowfit))
+    # plt.plot(x, funcE(x, *xexpfit))
         # plt.plot(x, funcL(x, *xlogfit))
     plt.axis([0, x[-1] + 0.1 * x[-1], 1.2 * np.amin(y), 5])
     plt.ylabel('Odleglosc [m]')

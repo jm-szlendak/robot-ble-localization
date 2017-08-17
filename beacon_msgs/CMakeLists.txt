@@ -6,6 +6,7 @@ project(beacon_msgs)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
+  geometry_msgs
   message_generation
   )
 
@@ -64,6 +65,7 @@ add_service_files(
  generate_messages(
    DEPENDENCIES
    std_msgs  # Or other packages containing msgs
+   geometry_msgs
  )
 
 ################################################

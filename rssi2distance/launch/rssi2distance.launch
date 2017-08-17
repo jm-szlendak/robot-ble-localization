@@ -1,0 +1,10 @@
+<launch>
+
+  <rosparam file="$(find rssi2distance)/config/testing_map.yaml" ns="/beacon_localization/map" command="load"/>
+
+
+  <node name="rssi2distance" pkg="rssi2distance" type="rssi2distance.py" respawn="false"
+    output="screen" />
+
+
+</launch>
