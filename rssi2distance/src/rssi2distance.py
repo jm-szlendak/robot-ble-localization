@@ -22,8 +22,8 @@ def setup_map(beacons):
         x = beacon['x']
         y = beacon['y']
         z = beacon['z']
-        id = beacon['id']
-        map.add_beacon(id, x, y, z, model)
+        bid = beacon['id']
+        map.add_beacon(bid, x, y, z, model)
 
     return map
 

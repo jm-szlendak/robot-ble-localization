@@ -1,14 +1,8 @@
-import math
-import numpy as np
-
-
 class Power10Model(object):
 
     def __init__(self, *args):
         self.A = args[0]
         self.B = args[1]
-
-        print self.A, self.B
 
     def apply(self, x):
         """Applies model to given rssi, returning distance"""

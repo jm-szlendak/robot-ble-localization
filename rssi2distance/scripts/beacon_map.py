@@ -16,7 +16,6 @@ class BeaconMap(object):
 
 
 class Beacon(object):
-
     def __init__(self, bid, x, y, z, model):
         self.bid = bid
         self.x = x

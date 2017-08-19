@@ -1,9 +1,9 @@
 import rospy
-from binascii import hexlify
 import time
 from beacon_msgs.srv import GetBeaconDistancesResponse
 from beacon_msgs.msg import BeaconPositionAndDistance
 from geometry_msgs.msg import Pose, Point
+
 
 class GetDistancesServiceWrapper:
     """This service returns list of recent beacon distances"""

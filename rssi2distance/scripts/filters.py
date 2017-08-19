@@ -1,8 +1,7 @@
 import time
-
 from threading import Lock
-
 from beacon_msgs.msg import LocationTag
+
 
 class AbstractFilter(object):
 
@@ -42,7 +41,6 @@ class MovingAverageFilter(AbstractFilter):
     def put(self, bid, item):
         with self.lock:
             if bid not in self.buffers.keys():
-                print 'will create buffer for bid ' + bid
                 self.buffers[bid] = []
                 self.values[bid] = None
 

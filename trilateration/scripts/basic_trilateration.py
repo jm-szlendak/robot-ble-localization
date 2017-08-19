@@ -3,7 +3,7 @@ from scipy import optimize
 import utils
 
 
-class BasicTrilateration(object):
+class BasicTrilaterationEngine(object):
     def __init__(self, error_fn='mse', initial_guess='beacon_center'):
         if error_fn is 'mse':
             self.error_fn = utils.mse
@@ -12,7 +12,7 @@ class BasicTrilateration(object):
             self.initial_guess_fn = utils.initial_guess_center_of_mass
 
     def calculate(self, beacons):
-        positions = [np.array([beacon.x, beacon.y]) for beacon in beacons]
+        positions = [np.array([beacon.pose.position.x, beacon.pose.position.y]) for beacon in beacons]
         distances = [beacon.distance for beacon in beacons]
 
         result = optimize.minimize(
@@ -25,4 +25,4 @@ class BasicTrilateration(object):
                 'maxiter': 1e+7
             })
 
-        return result.x
+        return [result.x[0], result.x[1], 0]
