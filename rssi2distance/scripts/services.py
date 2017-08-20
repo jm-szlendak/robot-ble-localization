@@ -20,6 +20,7 @@ class GetDistancesServiceWrapper:
                 updated_at=rospy.Time.from_sec(time.time()),
                 distance=self.__beacon_map.get(k).model.apply(v.rssi),
                 rssi=v.rssi,
+                name=self.__beacon_map.get(k).name,
                 pose=Pose(position=Point(
                     x=self.__beacon_map.get(k).x,
                     y=self.__beacon_map.get(k).y,

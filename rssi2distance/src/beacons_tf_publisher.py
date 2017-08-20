@@ -22,7 +22,7 @@ if __name__ == "__main__":
                 (beacon_cfg['x'], beacon_cfg['y'], beacon_cfg['z']),
                 (0.0, 0.0, 0.0, 1.0),
                 rospy.Time.now(), 'beacon_'+beacon_cfg['name'] + '_' + beacon_cfg['id'],
-                'world'
+                'map'
             )
         rate.sleep()
 

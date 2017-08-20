@@ -25,6 +25,10 @@ if __name__ == "__main__":
     LOCALIZATION_RATE = get_param('beacon_listener/trilateration/localization_rate', 1)
     TRILATERATION_ENGINE = get_param('beacon_listener/trilateration/engine', 'basic')
 
+    rospy.loginfo("Filtering: %s", TAG_DISTANCE_FILTERING)
+    rospy.loginfo("Engine: %s", TRILATERATION_ENGINE)
+
+
     # Create engine
     trilateration_engine = None
     if TRILATERATION_ENGINE is 'basic':
@@ -47,6 +51,9 @@ if __name__ == "__main__":
         # Ask for beacons
         beacons_with_distances = get_beacons_srv.call()
         # Do trilateration
+        if len(beacons_with_distances.measurements) < 3:
+            rospy.logwarn('Insufficient measurements for trilateration: %s', len(beacons_with_distances.measurements))
+            pass
         position = trilateration_engine.calculate(beacons_with_distances.measurements)
 
         pub.publish(Pose(position=Point(
@@ -60,7 +67,7 @@ if __name__ == "__main__":
             tf.transformations.quaternion_from_euler(0, 0, 0),
             rospy.Time.now(),
             'bl_pose',
-            'world'
+            'map'
         )
 
         r.sleep()

@@ -11,6 +11,10 @@ class AbstractFilter(object):
         self.__max_age = max_age
         self.lock = Lock()
 
+    def get_value(self, bid):
+        with self.lock:
+            return self.values[bid]
+
     def get_all_values(self):
         with self.lock:
             return self.values
@@ -56,3 +60,36 @@ class MovingAverageFilter(AbstractFilter):
             average.rssi /= float(len(self.buffers[bid]))
 
             self.values[bid] = average
+
+
+class ProbabilisticFilter(AbstractFilter):
+
+    def __init__(self,  a, b, Ts, max_age = 5):
+        super(ProbabilisticFilter, self).__init__(max_age)
+        self.__a = a
+        self.__b = b
+        self.__Ts = Ts
+        self.__R_est = dict()
+        self.__R_pred = dict()
+        self.__V_est  = dict()
+        self.__V_pred = dict()
+
+    def put(self, bid, item):
+        with self.lock:
+            if bid not in self.buffers.keys():
+                self.buffers[bid] = []
+                self.values[bid] = None
+                self.__R_est[bid] = float(item.rssi)
+                self.__R_pred[bid] = float(item.rssi)
+                self.__V_est[bid] = 0.0
+                self.__V_pred[bid] = 0.0
+
+        # Estimation
+        self.__R_est[bid] = self.__R_pred[bid] + self.__a * (float(item.rssi) - self.__R_pred[bid])
+        self.__V_est[bid] = self.__V_pred[bid] + (self.__b / self.__Ts) * (float(item.rssi) - self.__R_pred[bid])
+
+        # Prediction
+        self.__R_pred[bid] = self.__R_est[bid] + self.__V_est[bid] * self.__Ts
+        self.__V_pred[bid] = self.__V_est[bid]
+
+        self.values[bid] = LocationTag(gid=item.gid, bid=bid, stamp=time.time(), rssi=self.__R_est[bid])
