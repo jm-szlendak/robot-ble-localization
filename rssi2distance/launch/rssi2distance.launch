@@ -1,8 +1,9 @@
 <launch>
 
-  <rosparam file="$(find rssi2distance)/config/testing_map.yaml" ns="/beacon_localization/map" command="load"/>
+  <arg name="map" default="$(find rssi2distance)/config/default_map.yaml"/>
+  <rosparam file="$(arg map)" ns="/beacon_localization/map" command="load"/>
 
-  <node name="beacons_tf_publisher" pkg="rssi2distance" type="beacons_tf_publisher.py" respawn="false"
+  <node name="beacons_tf_publisher" pkg="rssi2distance" type="beacons_tf_publisher.py" respawn="true"
     output="screen" />
   <node name="rssi2distance" pkg="rssi2distance" type="rssi2distance.py" respawn="false"
     output="screen" />

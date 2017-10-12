@@ -61,3 +61,9 @@ $ sudo apt-get install libcap2-bin
 $ sudo setcap 'cap_net_raw,cap_net_admin+eip' /usr/local/lib/python2.7/dist-packages/bluepy/bluepy-helper
 ```
 
+If this does not work, try casting a spell:
+```
+$ sudo chmod 4751 /usr/local/lib/python2.7/dist-packages/bluepy/bluepy-helper
+
+```
+

@@ -1,17 +1,19 @@
 import unittest
-from basic_trilateration import BasicTrilateration
+
 from beacon_msgs.msg import BeaconPositionAndDistance
+from geometry_msgs.msg import Pose, Point
+from basic_trilateration import BasicTrilaterationEngine
 
 
 class UtilsTestCase(unittest.TestCase):
 
     def test_basic_trilateration(self):
-        t = BasicTrilateration()
+        t = BasicTrilaterationEngine()
 
         beacons = [
-            BeaconPositionAndDistance(x=1, y=0, distance=1),
-            BeaconPositionAndDistance(x=0, y=1, distance=1),
-            BeaconPositionAndDistance(x=-1, y=0, distance=1),
+            BeaconPositionAndDistance(pose=Pose(position=Point(x=1, y=0)), distance=1),
+            BeaconPositionAndDistance(pose=Pose(position=Point(x=0, y=1)), distance=1),
+            BeaconPositionAndDistance(pose=Pose(position=Point(x=-1, y=0)), distance=1),
         ]
 
         result = t.calculate(beacons)

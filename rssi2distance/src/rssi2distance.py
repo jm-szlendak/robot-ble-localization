@@ -17,7 +17,7 @@ import time
 
 recent_val_filter = OnlyRecentValueFilter()
 moving_avg_filter = MovingAverageFilter()
-probabilistic_filter = ProbabilisticFilter(0.25, 0.25, 1)
+probabilistic_filter = ProbabilisticFilter(0.2, 0.01, 1)
 
 recent_pub = None
 moving_avg_pub = None

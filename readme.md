@@ -8,3 +8,6 @@ Software to deal with localization using Bluetooth Low Energy beacons RSSI (radi
 ```
 $ bash -i -c "/opt/pycharm-community/bin/pycharm.sh"
 ```
+- ROS does not see nodes in package!
+
+Just add executable attribute to node files. 

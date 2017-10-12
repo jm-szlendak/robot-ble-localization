@@ -6,7 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from beacon_msgs.srv import RSSIProfile
 import rospy
-
+import tf
 
 def multi_measure(distance, count, bid, output_filename, service):
     try:
@@ -39,6 +39,11 @@ def single_measure(distance, count, bid, output_filename, service):
         exit(1)
 
 
+#
+# def auto_measure(tf_listener):
+#     try:
+#         tf_listener.lookupTransform('/')
+
 def main():
     # init ros
     rospy.init_node("rssi_scribe")
@@ -63,10 +68,13 @@ def main():
 
     rospy.loginfo('Service rssi_profile ready')
 
+
     if mode == 'single':
         single_measure(distance, count, bid, outfile_name, rssi_profile)
     elif mode == 'multi':
         multi_measure(distance, count, bid, outfile_name, rssi_profile)
+    elif mode == 'auto':
+        auto_measure()
     else:
         raise Exception(
             'Invalid mode: use "single" for column-oriented file or "multi" for many measurements (append mode)')

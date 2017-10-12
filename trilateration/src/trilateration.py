@@ -7,6 +7,7 @@ import tf
 from beacon_msgs.srv import GetBeaconDistances
 from geometry_msgs.msg import Pose, Point
 from scripts.basic_trilateration import BasicTrilaterationEngine
+from scripts.iterative_trilateration import IterativeTrilaterationEngine
 
 
 def get_param(name, default_val):
@@ -14,7 +15,6 @@ def get_param(name, default_val):
         return rospy.get_param(name)
     except KeyError:
         return default_val
-
 
 if __name__ == "__main__":
     # init ros
@@ -28,19 +28,19 @@ if __name__ == "__main__":
     rospy.loginfo("Filtering: %s", TAG_DISTANCE_FILTERING)
     rospy.loginfo("Engine: %s", TRILATERATION_ENGINE)
 
-
     # Create engine
     trilateration_engine = None
-    if TRILATERATION_ENGINE is 'basic':
+    if TRILATERATION_ENGINE == 'basic':
         trilateration_engine = BasicTrilaterationEngine()
-    if TRILATERATION_ENGINE is 'iterative':
-        raise RuntimeError('Iterative Trilateration Engine is not implemented yet')
-        # trilateration_engine = IterativeTrilaterationEngine()
+    elif TRILATERATION_ENGINE == 'iterative':
+        trilateration_engine = IterativeTrilaterationEngine()
+    else:
+        raise RuntimeError('Invalid trilateration engine')
 
     # Setup service
     service_path = '/beacon_localization/distances/' + TAG_DISTANCE_FILTERING
     rospy.wait_for_service(service_path)
-    get_beacons_srv = rospy.ServiceProxy(service_path, GetBeaconDistances)
+    get_beacons_srv = rospy.ServiceProxy(service_path, GetBeaconDistances, persistent=True)
 
     # Setup tf broadcaster and pose publisher
     br = tf.TransformBroadcaster()
@@ -48,12 +48,21 @@ if __name__ == "__main__":
 
     r = rospy.Rate(LOCALIZATION_RATE)
     while not rospy.is_shutdown():
-        # Ask for beacons
-        beacons_with_distances = get_beacons_srv.call()
+
+        # Ask service for beacons
+        try :
+            beacons_with_distances = get_beacons_srv.call()
+        except rospy.ServiceException:
+            rospy.logwarn('Distances service unavailable, waiting for service reconnect...')
+            rospy.wait_for_service(service_path)
+            get_beacons_srv = rospy.ServiceProxy(service_path, GetBeaconDistances, persistent=True)
+            continue
+
         # Do trilateration
         if len(beacons_with_distances.measurements) < 3:
             rospy.logwarn('Insufficient measurements for trilateration: %s', len(beacons_with_distances.measurements))
-            pass
+            continue
+
         position = trilateration_engine.calculate(beacons_with_distances.measurements)
 
         pub.publish(Pose(position=Point(
@@ -72,3 +81,4 @@ if __name__ == "__main__":
 
         r.sleep()
 
+    get_beacons_srv.close()

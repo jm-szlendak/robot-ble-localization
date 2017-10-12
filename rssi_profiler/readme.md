@@ -41,3 +41,12 @@ Column represents consecutive measurements.
 2nd column - average RSSI
 
 3rd column - standard deviation
+
+#MAGICAL Scribe
+When using robot with reliable localization like AMCL, you can collect profile magically. 
+Run beacon_listener and rssi2distance (you need beacon map and dummy rssi-distance model, it can be dummy model)
+Then:
+```
+$ rosrun rssi_profiler magical_scribe.py [output file] 
+```
+Magical scribe will query TFs from robot base-link to beacons and calculate measurement point. 
