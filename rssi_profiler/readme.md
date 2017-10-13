@@ -47,6 +47,7 @@ When using robot with reliable localization like AMCL, you can collect profile m
 Run beacon_listener and rssi2distance (you need beacon map and dummy rssi-distance model, it can be dummy model)
 Then:
 ```
-$ rosrun rssi_profiler magical_scribe.py [output file] 
+$ rosrun rssi_profiler magical_scribe.py 
 ```
 Magical scribe will query TFs from robot base-link to beacons and calculate measurement point. 
+Run magical scribe with `--help` to get available arguments.
