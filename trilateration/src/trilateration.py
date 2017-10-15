@@ -21,9 +21,9 @@ if __name__ == "__main__":
     rospy.init_node('trilateration')
     rospy.loginfo("Starting Trilateration node")
 
-    TAG_DISTANCE_FILTERING = get_param('beacon_listener/trilateration/distance_filtering', 'recent')
-    LOCALIZATION_RATE = get_param('beacon_listener/trilateration/localization_rate', 1)
-    TRILATERATION_ENGINE = get_param('beacon_listener/trilateration/engine', 'basic')
+    TAG_DISTANCE_FILTERING = get_param('beacon_localization/trilateration/distance_filtering', 'recent')
+    LOCALIZATION_RATE = get_param('beacon_localization/trilateration/localization_rate', 1)
+    TRILATERATION_ENGINE = get_param('beacon_localization/trilateration/engine', 'basic')
 
     rospy.loginfo("Filtering: %s", TAG_DISTANCE_FILTERING)
     rospy.loginfo("Engine: %s", TRILATERATION_ENGINE)

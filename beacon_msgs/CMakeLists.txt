@@ -50,6 +50,7 @@ find_package(catkin REQUIRED COMPONENTS
    AdvertisingBunch.msg
    LocationTag.msg
    BeaconPositionAndDistance.msg
+   BeaconsScan.msg
  )
 
 ## Generate services in the 'srv' folder

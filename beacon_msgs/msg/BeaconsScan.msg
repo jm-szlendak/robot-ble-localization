@@ -1,0 +1,1 @@
+BeaconPositionAndDistance[] beacons
