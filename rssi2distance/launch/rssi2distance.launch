@@ -1,12 +1,17 @@
 <launch>
 
   <arg name="map" default="$(find rssi2distance)/config/default_map.yaml"/>
-  <rosparam file="$(arg map)" ns="/beacon_localization/map" command="load"/>
+  <arg name="receiver_cfg" default="$(find rssi2distance)/config/default_receiver.yaml"/>
+  <arg name="robot_name" default="batman"/>
+
+
+  <rosparam file="$(arg map)" ns="$(arg robot_name)/beacon_localization/map" command="load" />
+  <rosparam file="$(arg receiver_cfg)" ns="$(arg robot_name)/beacon_localization/receiver" command="load" />
 
   <node name="beacons_tf_publisher" pkg="rssi2distance" type="beacons_tf_publisher.py" respawn="true"
-    output="screen" />
+    args="$(arg robot_name)" output="screen" ns="$(arg robot_name)"/>
   <node name="rssi2distance" pkg="rssi2distance" type="rssi2distance.py" respawn="false"
-    output="screen" />
+    output="screen" ns="$(arg robot_name)"/>
 
 
 </launch>

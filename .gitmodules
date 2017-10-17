@@ -1,3 +1,0 @@
-[submodule "particle-filter"]
-	path = particle-filter
-	url = git@github.com:jakubszlendak/particle-filter.git

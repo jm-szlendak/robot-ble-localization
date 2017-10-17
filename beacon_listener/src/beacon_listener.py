@@ -44,17 +44,17 @@ if __name__ == "__main__":
     # init filtering
     adv_filter = BeaconLocalizationFilter(GROUP_ID, MAX_BEACON_AGE)
     # ros_pub_int = rospy.Publisher('/beacon_localization/location_tag/interpolated', LocationTag, queue_size=100)
-    ros_pub = rospy.Publisher('/beacon_localization/location_tag', LocationTag, queue_size=100)
+    ros_pub = rospy.Publisher('beacon_localization/location_tag', LocationTag, queue_size=100)
     publisher = PublishingWrapper(adv_filter=adv_filter, container=beacon_container, pub=ros_pub)
 
     # init services
     available_beacons_svc_wrapper = AvailableBeaconsServiceWrapper(beacon_container)
-    available_beacons_svc = rospy.Service('/beacon_localization/get_all_available_beacons', GetAvailableBeacons, available_beacons_svc_wrapper.handler)
-    rospy.loginfo("/beacon_localization/get_all_available_beacons service started")
+    available_beacons_svc = rospy.Service('beacon_localization/get_all_available_beacons', GetAvailableBeacons, available_beacons_svc_wrapper.handler)
+    rospy.loginfo("beacon_localization/get_all_available_beacons service started")
 
     available_tags_svc_wrapper = AvailableLocationTagsServiceWrapper(beacon_container, adv_filter)
-    available_tags_svc = rospy.Service('/beacon_localization/get_available_location_tags', GetAvailableLocationTags, available_tags_svc_wrapper.handler)
-    rospy.loginfo("/beacon_localization/get_available_location_tags' service started")
+    available_tags_svc = rospy.Service('beacon_localization/get_available_location_tags', GetAvailableLocationTags, available_tags_svc_wrapper.handler)
+    rospy.loginfo("beacon_localization/get_available_location_tags' service started")
 
     r = rospy.Rate(PUBLISH_RATE)
     while not rospy.is_shutdown():

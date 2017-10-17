@@ -4,8 +4,9 @@ import os.path
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from beacon_msgs.msg import LocationTag, BeaconPositionAndDistance
+from beacon_msgs.msg import LocationTag, BeaconsScan, BeaconPositionAndDistance
 from geometry_msgs.msg import Pose, Point
+from std_msgs.msg import Header
 from scripts.filters import OnlyRecentValueFilter, MovingAverageFilter, ProbabilisticFilter
 from scripts.services import GetDistancesServiceWrapper
 from beacon_msgs.srv import GetBeaconDistances
@@ -26,6 +27,8 @@ probabilistic_pub = None
 beacon_map = None
 
 
+radio_frame = 'radio_base_link'
+
 def setup_map(beacons):
     map = BeaconMap()
     for beacon in beacons:
@@ -43,18 +46,24 @@ def setup_map(beacons):
 def publish_distance(bid, filter, publisher):
     item = filter.get_value(bid)
 
-    publisher.publish(BeaconPositionAndDistance(
-        bid=bid,
-        updated_at=rospy.Time.from_sec(time.time()),
-        distance=beacon_map.get(bid).model.apply(item.rssi),
-        rssi=item.rssi,
-        name=beacon_map.get(bid).name,
-        pose=Pose(position=Point(
-            x=beacon_map.get(bid).x,
-            y=beacon_map.get(bid).y,
-            z=beacon_map.get(bid).z
-        ))
-    ))
+    msg = BeaconsScan(
+        beacons=[
+            BeaconPositionAndDistance(
+                header=Header(stamp=rospy.Time.now(), frame_id=radio_frame),
+                bid=k,
+                updated_at=rospy.Time.from_sec(time.time()),
+                distance=beacon_map.get(k).model.apply(v.rssi),
+                rssi=v.rssi,
+                name=beacon_map.get(k).name,
+                pose=Pose(position=Point(
+                    x=beacon_map.get(k).x,
+                    y=beacon_map.get(k).y,
+                    z=beacon_map.get(k).z
+                ))
+            ) for k, v in filter.get_all_values().items()
+        ]
+    )
+    publisher.publish(msg)
 
 
 def callback(data):
@@ -72,23 +81,24 @@ if __name__ == "__main__":
     rospy.init_node("rssi2distance")
     rospy.loginfo("Starting RSSI2Distance node")
 
+    radio_frame = rospy.get_namespace() + radio_frame
     rospy.Subscriber('beacon_localization/location_tag', LocationTag, callback)
 
-    beacons = rospy.get_param('/beacon_localization/map/beacons')
+    beacons = rospy.get_param('beacon_localization/map/beacons')
     beacon_map = setup_map(beacons)
 
     recent_val_srv_wrapper = GetDistancesServiceWrapper(recent_val_filter, beacon_map)
     moving_avg_srv_wrapper = GetDistancesServiceWrapper(moving_avg_filter, beacon_map)
     probabilistic_srv_wrapper = GetDistancesServiceWrapper(probabilistic_filter, beacon_map)
 
-    recent_val_srv = rospy.Service('/beacon_localization/distances/recent', GetBeaconDistances,
+    recent_val_srv = rospy.Service('beacon_localization/distances/recent', GetBeaconDistances,
                                    recent_val_srv_wrapper.handler)
-    moving_avg_srv = rospy.Service('/beacon_localization/distances/moving_average', GetBeaconDistances,
+    moving_avg_srv = rospy.Service('beacon_localization/distances/moving_average', GetBeaconDistances,
                                    moving_avg_srv_wrapper.handler)
-    probabilistic_srv = rospy.Service('/beacon_localization/distances/probabilistic', GetBeaconDistances,
+    probabilistic_srv = rospy.Service('beacon_localization/distances/probabilistic', GetBeaconDistances,
                                       probabilistic_srv_wrapper.handler)
 
-    recent_pub = rospy.Publisher('/beacon_localization/distances/recent', BeaconPositionAndDistance, queue_size=100)
-    moving_avg_pub = rospy.Publisher('/beacon_localization/distances/moving_average', BeaconPositionAndDistance, queue_size=100)
-    probabilistic_pub = rospy.Publisher('/beacon_localization/distances/probabilistic', BeaconPositionAndDistance, queue_size=100)
+    recent_pub = rospy.Publisher('beacon_localization/distances/recent', BeaconsScan, queue_size=100)
+    moving_avg_pub = rospy.Publisher('beacon_localization/distances/moving_average', BeaconsScan, queue_size=100)
+    probabilistic_pub = rospy.Publisher('beacon_localization/distances/probabilistic', BeaconsScan, queue_size=100)
     rospy.spin()
