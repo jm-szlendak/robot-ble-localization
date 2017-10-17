@@ -16,7 +16,7 @@ if __name__ == "__main__":
     receiver = rospy.get_param('beacon_localization/receiver')
 
     br = tf.TransformBroadcaster()
-    rate = rospy.Rate(1)
+    rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
         for beacon_cfg in beacons:

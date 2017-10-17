@@ -45,11 +45,12 @@ def setup_map(beacons):
 
 def publish_distance(bid, filter, publisher):
     item = filter.get_value(bid)
-
+    hdr = Header(stamp=rospy.Time.now(), frame_id=radio_frame)
     msg = BeaconsScan(
+        header=hdr,
         beacons=[
             BeaconPositionAndDistance(
-                header=Header(stamp=rospy.Time.now(), frame_id=radio_frame),
+                header=hdr,
                 bid=k,
                 updated_at=rospy.Time.from_sec(time.time()),
                 distance=beacon_map.get(k).model.apply(v.rssi),
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     rospy.init_node("rssi2distance")
     rospy.loginfo("Starting RSSI2Distance node")
 
-    radio_frame = rospy.get_namespace() + radio_frame
+    radio_frame = rospy.get_namespace()[1:] + radio_frame
     rospy.Subscriber('beacon_localization/location_tag', LocationTag, callback)
 
     beacons = rospy.get_param('beacon_localization/map/beacons')
