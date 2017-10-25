@@ -21,6 +21,8 @@ if __name__ == "__main__":
     rospy.init_node('trilateration')
     rospy.loginfo("Starting Trilateration node")
 
+    robot_name = rospy.get_namespace()
+
     TAG_DISTANCE_FILTERING = get_param('beacon_localization/trilateration/distance_filtering', 'recent')
     LOCALIZATION_RATE = get_param('beacon_localization/trilateration/localization_rate', 1)
     TRILATERATION_ENGINE = get_param('beacon_localization/trilateration/engine', 'basic')
@@ -38,13 +40,13 @@ if __name__ == "__main__":
         raise RuntimeError('Invalid trilateration engine')
 
     # Setup service
-    service_path = '/beacon_localization/distances/' + TAG_DISTANCE_FILTERING
+    service_path = 'beacon_localization/distances/' + TAG_DISTANCE_FILTERING
     rospy.wait_for_service(service_path)
     get_beacons_srv = rospy.ServiceProxy(service_path, GetBeaconDistances, persistent=True)
 
     # Setup tf broadcaster and pose publisher
     br = tf.TransformBroadcaster()
-    pub = rospy.Publisher('/beacon_localization/bl_pose', Pose, queue_size=100)
+    pub = rospy.Publisher('beacon_localization/bl_pose', Pose, queue_size=100)
 
     r = rospy.Rate(LOCALIZATION_RATE)
     while not rospy.is_shutdown():
@@ -75,7 +77,7 @@ if __name__ == "__main__":
             (position[0], position[1], position[2]),
             tf.transformations.quaternion_from_euler(0, 0, 0),
             rospy.Time.now(),
-            'bl_pose',
+            robot_name+'bl_pose',
             'map'
         )
 

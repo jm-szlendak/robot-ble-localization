@@ -63,8 +63,8 @@ def main():
 
     rospy.loginfo("Starting RSSI Scribe")
 
-    rospy.wait_for_service('/beacon_localization/rssi_profile')
-    rssi_profile = rospy.ServiceProxy('/beacon_localization/rssi_profile', RSSIProfile)
+    rospy.wait_for_service('beacon_localization/rssi_profile')
+    rssi_profile = rospy.ServiceProxy('beacon_localization/rssi_profile', RSSIProfile)
 
     rospy.loginfo('Service rssi_profile ready')
 
@@ -73,8 +73,6 @@ def main():
         single_measure(distance, count, bid, outfile_name, rssi_profile)
     elif mode == 'multi':
         multi_measure(distance, count, bid, outfile_name, rssi_profile)
-    elif mode == 'auto':
-        auto_measure()
     else:
         raise Exception(
             'Invalid mode: use "single" for column-oriented file or "multi" for many measurements (append mode)')

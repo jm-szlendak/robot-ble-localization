@@ -1,7 +1,7 @@
 <launch>
   <arg name="robot_name" default="batman"/>
 
-  <rosparam file="$(find beacon_listener)/config/beacon_listener.yaml" command="load"/>
+  <rosparam file="$(find beacon_listener)/config/beacon_listener.yaml" command="load" ns="$(arg robot_name)"/>
 
   <!-- load the controllers -->
   <node name="beacon_listener" pkg="beacon_listener" type="beacon_listener.py" respawn="false" ns="$(arg robot_name)"

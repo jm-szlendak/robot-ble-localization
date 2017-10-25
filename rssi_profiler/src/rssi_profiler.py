@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # init services
     rssi_profiler_srv_wrapper = RSSIProfileServiceWrapper(bridge, 10)
-    rssi_profiler_srv = rospy.Service('/beacon_localization/rssi_profile', RSSIProfile, rssi_profiler_srv_wrapper.handler)
+    rssi_profiler_srv = rospy.Service('beacon_localization/rssi_profile', RSSIProfile, rssi_profiler_srv_wrapper.handler)
     rospy.loginfo("/beacon_localization/get_all_available_beacons service started")
 
     rospy.spin()

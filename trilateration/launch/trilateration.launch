@@ -1,0 +1,8 @@
+<launch>
+  <arg name="robot_name" default="batman"/>
+
+  <node name="trilateration" pkg="trilateration" type="trilateration.py" respawn="true"
+    output="screen" ns="$(arg robot_name)"/>
+
+
+</launch>

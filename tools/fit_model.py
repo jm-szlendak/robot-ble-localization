@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     # xlogfit, _ = curve_fit(funcL, x, y)
     # xexpfit, _ = curve_fit(funcL, x, y)
-    xpowfit, _ = curve_fit(funcP, x, y)
+    xpowfit, _ = curve_fit(funcP, x, y, maxfev=6000)
     xpow_interpolation = interpolate([(x[0], y[0]), (x[-1], y[-1])])
 
 
