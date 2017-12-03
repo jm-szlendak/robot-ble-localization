@@ -63,8 +63,8 @@ def main():
 
     rospy.loginfo("Starting RSSI Scribe")
 
-    rospy.wait_for_service('beacon_localization/rssi_profile')
-    rssi_profile = rospy.ServiceProxy('beacon_localization/rssi_profile', RSSIProfile)
+    rospy.wait_for_service('/batman/beacon_localization/rssi_profile')
+    rssi_profile = rospy.ServiceProxy('/batman/beacon_localization/rssi_profile', RSSIProfile)
 
     rospy.loginfo('Service rssi_profile ready')
 

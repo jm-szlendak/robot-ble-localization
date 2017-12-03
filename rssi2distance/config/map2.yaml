@@ -1,0 +1,30 @@
+beacons: [
+  {
+    id: aa5aab45bdcf,
+    x: 1.80,
+    y: 2.95,
+    z: 0,
+    name: A,
+#    modelParams: [ 55.695579919310582,  15.985762633133353 ]
+    modelParams: [ 50.515,  28.631 ]
+  },
+  {
+    id: 237b44757adc,
+
+    x: -2.5,
+    y: 1.50,
+    z: 0,
+    name: B,
+#    modelParams: [ 41.81294905,  63.26101997]
+    modelParams: [ 66.028,  10.074 ]
+  },
+  {
+    id: aaa25624c9e4,
+#    x: 1.85,
+    x: 0.25,
+    y: -1.35,
+    z: 0,
+    name: C,
+    modelParams: [ 68.216, 0.984 ]
+  }
+]

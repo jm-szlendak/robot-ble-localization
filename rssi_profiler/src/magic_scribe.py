@@ -33,7 +33,7 @@ def main():
     filter_type = args.filter
     result = {}
 
-    beacons = rospy.get_param('/beacon_localization/map/beacons')
+    beacons = rospy.get_param('/batman/beacon_localization/map/beacons')
 
     rospy.sleep(0.1)
     t = tf.TransformListener()
@@ -44,8 +44,8 @@ def main():
 
         result[beacon['id']] = np.linalg.norm(trans)
 
-    rospy.wait_for_service('/beacon_localization/distances/'+filter_type)
-    distances_srv = rospy.ServiceProxy('/beacon_localization/distances/'+filter_type, GetBeaconDistances)
+    rospy.wait_for_service('/batman/beacon_localization/distances/'+filter_type)
+    distances_srv = rospy.ServiceProxy('/batman/beacon_localization/distances/'+filter_type, GetBeaconDistances)
     distances_response = distances_srv.call()
 
     for id, dist in result.items():

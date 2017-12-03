@@ -17,11 +17,10 @@ if __name__ == '__main__':
     data = np.loadtxt(args.input).T
 
     plt.figure()
-    n, bins, patches = plt.hist(data, np.linspace(-90, 0, 90), normed=1, facecolor='green', alpha=0.75)
-    y = mlab.normpdf(bins, np.average(data), np.std(data))
-    if args.f:
-        l = plt.plot(bins, y, 'r--', linewidth=1)
-    plt.xlabel('RSSI [dBm]')
+    plt.plot(data)
+    plt.axis([0, 100, -80, -45])
+    plt.ylabel('RSSI [dBm]')
+    plt.xlabel('Czas [s]')
 
     plt.grid()
     plt.show()

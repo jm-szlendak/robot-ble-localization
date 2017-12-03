@@ -42,14 +42,14 @@ if __name__ == '__main__':
 
     data = np.loadtxt(args.input).T
     y = data[0]
-    x = -data[1]
+    x = data[1]
 
 
 
     # xlogfit, _ = curve_fit(funcL, x, y)
     # xexpfit, _ = curve_fit(funcL, x, y)
-    xpowfit, _ = curve_fit(funcP, x, y, maxfev=6000)
-    xpow_interpolation = interpolate([(x[0], y[0]), (x[-1], y[-1])])
+    xpowfit, _ = curve_fit(funcP, -x, y, maxfev=6000)
+    xpow_interpolation = interpolate([(-x[0], y[0]), (-x[-1], y[-1])])
 
 
     print 'Pow fitting results: [a,b,c]: ', xpowfit
@@ -65,8 +65,8 @@ if __name__ == '__main__':
     plt.scatter(x, y)
     # print funcL(np.linspace(0,100,100), *xlogfit)
     # plt.plot(x, funcL(x, *xlogfit))
-    plt.plot(np.linspace(0,100,100), funcP(np.linspace(0,100,100), *xpowfit), label='fit')
-    plt.plot(np.linspace(0,100,100), funcP(np.linspace(0,100,100), *xpow_interpolation), label='interpolation')
+    plt.plot(-np.linspace(0,100,100), funcP(np.linspace(0,100,100), *xpowfit), label='Dopasowanie krzywej')
+    plt.plot(-np.linspace(0,100,100), funcP(np.linspace(0,100,100), *xpow_interpolation), label='Interpolacja')
 
     # plt.plot(x, funcE(x, *xexpfit))
         # plt.plot(x, funcL(x, *xlogfit))
