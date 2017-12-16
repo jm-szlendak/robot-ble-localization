@@ -1,0 +1,9 @@
+<launch>
+  <arg name="robot_name" default="batman"/>
+  <arg name="map" default="$(find fingerprinting)/config/default_map.yaml"/>
+
+
+  <node name="fingerprinting" pkg="fingerprinting" type="fingerprinting.py" respawn="true"
+    output="screen" args="$(arg map)" ns="$(arg robot_name)"/>
+
+</launch>

@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     robot_name = rospy.get_namespace()
 
-    TAG_DISTANCE_FILTERING = get_param('beacon_localization/trilateration/distance_filtering', 'recent')
+    TAG_DISTANCE_FILTERING = get_param('beacon_localization/trilateration/distance_filtering', 'probabilistic')
     LOCALIZATION_RATE = get_param('beacon_localization/trilateration/localization_rate', 1)
     TRILATERATION_ENGINE = get_param('beacon_localization/trilateration/engine', 'basic')
 

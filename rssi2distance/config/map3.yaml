@@ -14,7 +14,7 @@ beacons: [
     x: -2.5,
     y: 1.50,
     z: 0,
-    name: B,
+    name: B,50
 #    modelParams: [ 41.81294905,  63.26101997]
     modelParams: [ 50, 50 ]
   },
